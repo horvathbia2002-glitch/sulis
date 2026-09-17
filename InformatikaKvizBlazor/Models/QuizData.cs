@@ -1,4 +1,14 @@
-using System.Collections.Generic;\n\nnamespace QuizApp.Models\n{\n    public static class QuizData\n    {\n        public static List<QuizItem> GetQuestions()\n        {\n            return new List<QuizItem>\n            {\n                new QuizItem {
+using System.Collections.Generic;
+
+namespace QuizApp.Models
+{
+    public static class QuizData
+    {
+        public static List<QuizItem> GetQuestions()
+        {
+            return new List<QuizItem>
+            {
+                new QuizItem {
                     Text = "Melyik programban nem lehet SmartArt alakzatot létrehozni?",
                     Options = new List<string> { "Word", "PowerPoint", "Excel", "Outlook", "GoogleDokumentum" },
                     CorrectIndex = 4,
@@ -105,7 +115,7 @@ using System.Collections.Generic;\n\nnamespace QuizApp.Models\n{\n    public sta
                     Options = new List<string> { "Ha a címsorokat a beépített Címsor 1, Címsor 2 ... stílusokkal formázzuk, akkor a címsorokból gyorsan készíthető tartalomjegyzék", "Tartalomjegyzék készítésekor az oldalszámokat be kell gépelni", "Tartalomjegyzék készítésekor be lehet állítani, hogy hány szintet jelenítsen meg." },
                     CorrectIndex = 1,
                     Explanation = "A tartalomjegyzék automatikus generálásának pont az a lényege, hogy az oldalszámokat a program számolja ki és illeszti be, nekünk nem kell (és nem is szabad) gépelni."
-                },
+                }
             };
         }
     }
