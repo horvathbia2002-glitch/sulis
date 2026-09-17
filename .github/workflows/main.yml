@@ -1,0 +1,26 @@
+name: Deploy Blazor WASM to GitHub Pages
+on:
+  push:
+    branches: [ main ]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.x'
+    - name: Publish
+      run: dotnet publish InformatikaKvizBlazor -c Release -o output
+    - name: Fix base href and add .nojekyll
+      run: |
+        sed -i 's/<base href="\/" \/>/<base href="\/sulis\/" \/>/g' output/wwwroot/index.html
+        touch output/wwwroot/.nojekyll
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./output/wwwroot
