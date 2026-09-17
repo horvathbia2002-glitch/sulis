@@ -1,0 +1,7 @@
+C:\Users\Adam\Downloads\InformatikaKvizBlazor\obj\Release\net8.0\QuizApp.csproj.AssemblyReference.cache
+C:\Users\Adam\Downloads\InformatikaKvizBlazor\obj\Release\net8.0\rpswa.dswa.cache.json
+C:\Users\Adam\Downloads\InformatikaKvizBlazor\obj\Release\net8.0\QuizApp.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Adam\Downloads\InformatikaKvizBlazor\obj\Release\net8.0\QuizApp.AssemblyInfoInputs.cache
+C:\Users\Adam\Downloads\InformatikaKvizBlazor\obj\Release\net8.0\QuizApp.AssemblyInfo.cs
+C:\Users\Adam\Downloads\InformatikaKvizBlazor\obj\Release\net8.0\QuizApp.csproj.CoreCompileInputs.cache
+C:\Users\Adam\Downloads\InformatikaKvizBlazor\obj\Release\net8.0\QuizApp.MvcApplicationPartsAssemblyInfo.cache

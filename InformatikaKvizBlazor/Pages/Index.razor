@@ -1,0 +1,130 @@
+@page "/"
+@using QuizApp.Models
+
+<div class="container mt-4 mb-5">
+    <h1 class="mb-4 text-center">Informatika Kvíz</h1>
+
+    @foreach (var q in Questions)
+    {
+        var qIndex = Questions.IndexOf(q);
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <strong>@(qIndex + 1). @q.Text</strong>
+            </div>
+            <div class="card-body">
+                @for (int i = 0; i < q.Options.Count; i++)
+                {
+                    var optIndex = i;
+                    var isSelected = q.SelectedIndex == optIndex;
+                    var isAnswered = q.SelectedIndex != -1;
+                    var isCorrect = q.CorrectIndex == optIndex;
+
+                    string btnClass = "btn btn-outline-secondary d-block w-100 mb-2 text-start";
+                    if (isAnswered)
+                    {
+                        if (isSelected && isCorrect)
+                            btnClass = "btn btn-success d-block w-100 mb-2 text-start";
+                        else if (isSelected && !isCorrect)
+                            btnClass = "btn btn-danger d-block w-100 mb-2 text-start";
+                        else if (isCorrect)
+                            btnClass = "btn btn-outline-success d-block w-100 mb-2 text-start";
+                        else
+                            btnClass = "btn btn-outline-secondary d-block w-100 mb-2 text-start disabled";
+                    }
+
+                    <button class="@btnClass" disabled="@isAnswered" @onclick="() => AnswerQuestion(q, optIndex)">
+                        @q.Options[optIndex]
+                    </button>
+                }
+            </div>
+        </div>
+    }
+
+    <div class="card shadow mt-5 border-info">
+        <div class="card-body text-center">
+            <button class="btn btn-info btn-lg w-100 mb-3 text-white" style="font-weight: bold;" @onclick="Evaluate">Kiértékelés</button>
+
+            @if (ShowResults)
+            {
+                var correctCount = Questions.Count(q => q.SelectedIndex == q.CorrectIndex);
+                var percentage = (double)correctCount / Questions.Count * 100;
+
+                <div class="alert alert-success mt-3" style="font-size: 1.2rem;">
+                    <strong>Eredmény: @percentage.ToString("0.00")%</strong><br />
+                    Eltalált kérdések: @correctCount / @Questions.Count
+                </div>
+
+                var wrongQuestions = Questions.Where(q => q.SelectedIndex != q.CorrectIndex && q.SelectedIndex != -1).ToList();
+
+                @if (wrongQuestions.Any())
+                {
+                    <div class="mt-4 text-start">
+                        <h4 class="text-danger">Elrontott feladatok és magyarázatok:</h4>
+                        <select class="form-select mb-3 border-danger" @onchange="OnWrongQuestionSelected">
+                            <option value="-1">Válassz egy elrontott kérdést a magyarázathoz...</option>
+                            @foreach (var q in wrongQuestions)
+                            {
+                                <option value="@Questions.IndexOf(q)">@(Questions.IndexOf(q) + 1). @(q.Text.Length > 60 ? q.Text.Substring(0, 60) + "..." : q.Text)</option>
+                            }
+                        </select>
+
+                        @if (SelectedWrongQuestion != null)
+                        {
+                            <div class="card border-danger mt-3">
+                                <div class="card-body">
+                                    <h5 class="card-title">@SelectedWrongQuestion.Text</h5>
+                                    <p class="text-danger mb-1"><strong>A te válaszod:</strong> @SelectedWrongQuestion.Options[SelectedWrongQuestion.SelectedIndex]</p>
+                                    <p class="text-success mb-3"><strong>Helyes válasz:</strong> @SelectedWrongQuestion.Options[SelectedWrongQuestion.CorrectIndex]</p>
+                                    <div class="alert alert-warning mb-0">
+                                        <strong>Magyarázat:</strong> @SelectedWrongQuestion.Explanation
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-success mt-3">Gratulálunk, minden megválaszolt kérdés helyes!</div>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<QuizItem> Questions = new();
+    private bool ShowResults = false;
+    private QuizItem? SelectedWrongQuestion;
+
+    protected override void OnInitialized()
+    {
+        Questions = QuizData.GetQuestions();
+    }
+
+    private void AnswerQuestion(QuizItem q, int selectedIndex)
+    {
+        if (q.SelectedIndex == -1)
+        {
+            q.SelectedIndex = selectedIndex;
+        }
+    }
+
+    private void Evaluate()
+    {
+        ShowResults = true;
+        SelectedWrongQuestion = null;
+    }
+
+    private void OnWrongQuestionSelected(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out int index) && index >= 0)
+        {
+            SelectedWrongQuestion = Questions[index];
+        }
+        else
+        {
+            SelectedWrongQuestion = null;
+        }
+    }
+}

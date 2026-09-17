@@ -1,0 +1,11 @@
+<Router AppAssembly="@typeof(App).Assembly">
+    <Found Context="routeData">
+        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+    </Found>
+    <NotFound>
+        <PageTitle>Nincs meg</PageTitle>
+        <LayoutView Layout="@typeof(MainLayout)">
+            <p role="alert">Az oldal nem található.</p>
+        </LayoutView>
+    </NotFound>
+</Router>
